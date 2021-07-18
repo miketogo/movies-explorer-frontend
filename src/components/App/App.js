@@ -28,6 +28,7 @@ function App(props) {
   const [savedFilms, setSavedFilms] = React.useState(null);
   const [searchValue, setSearchValue] = React.useState('');
   const [apiErrorMessage, setApiErrorMessage] = React.useState('');
+  const [profileMessage, setProfileMessage] = React.useState('');
   const [filmsApiErrorMessage, setFilmsApiErrorMessage] = React.useState('');
   const [isEditProfileClicked, setEditProfileClicked] = React.useState(false);
 
@@ -35,13 +36,35 @@ function App(props) {
     const jwt = localStorage.getItem("jwt");
 
     if (jwt) {
-      let jwt = localStorage.getItem("jwt");
+
+      const jwt = localStorage.getItem("jwt");
       mainApi.jwtCheck(jwt).then((res) => {
+        setLoggedIn(true);
         console.log(res)
         setCurrentUser(res.user)
         // авторизуем пользователя
-        setLoggedIn(true);
-        props.history.push("/movies");
+
+
+        if (localStorage.getItem('localSearchValue') && localStorage.getItem('localIsShorts')) {
+          setPreloaderVisible(true)
+          moviesApi.getAllMovies().then((films) => {
+            const localSearchValue = localStorage.getItem('localSearchValue');
+            const localIsShorts = localStorage.getItem('localIsShorts');
+            setAllFilms(films)
+            setSearchValue(localSearchValue)
+            setFilmsApiErrorMessage('')
+            setFilms(filterFilms(localSearchValue, localIsShorts, films))
+          })
+            .catch((err) => {
+              setFilmsApiErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
+              console.log(err); // выведем ошибку в консоль
+            })
+            .finally(() =>
+              setPreloaderVisible(false)
+            )
+        }
+
+
         mainApi.getSavedFilms()
           .then((res) => {
             setAllSavedFilms(res.movies)
@@ -57,15 +80,19 @@ function App(props) {
 
     };
 
-    if (localStorage.getItem('localSearchValue') && localStorage.getItem('localIsShorts')) {
+
+  }, [])
+
+
+  function getMovies(searchValue, isShorts) {
+    if(!allFilms){
       setPreloaderVisible(true)
       moviesApi.getAllMovies().then((films) => {
-        let localSearchValue = localStorage.getItem('localSearchValue');
-        let localIsShorts = localStorage.getItem('localIsShorts');
+
         setAllFilms(films)
-        setSearchValue(localSearchValue)
+        setSearchValue(searchValue)
         setFilmsApiErrorMessage('')
-        setFilms(filterFilms(localSearchValue, localIsShorts, films))
+        setFilms(filterFilms(searchValue, isShorts, films))
       })
         .catch((err) => {
           setFilmsApiErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
@@ -74,27 +101,12 @@ function App(props) {
         .finally(() =>
           setPreloaderVisible(false)
         )
+    } else{
+      setSearchValue(searchValue)
+        setFilmsApiErrorMessage('')
+        setFilms(filterFilms(searchValue, isShorts, allFilms))
     }
 
-
-  }, [props.history])
-
-  function getMovies(searchValue, isShorts) {
-    setPreloaderVisible(true)
-    moviesApi.getAllMovies().then((films) => {
-
-      setAllFilms(films)
-      setSearchValue(searchValue)
-      setFilmsApiErrorMessage('')
-      setFilms(filterFilms(searchValue, isShorts, films))
-    })
-      .catch((err) => {
-        setFilmsApiErrorMessage('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз')
-        console.log(err); // выведем ошибку в консоль
-      })
-      .finally(() =>
-        setPreloaderVisible(false)
-      )
   }
 
   function getSavedFilms() {
@@ -160,6 +172,8 @@ function App(props) {
   function handleUpdateUser(userInfo) {
     mainApi.setUserInfo(userInfo)
       .then((res) => {
+        setProfileMessage('Данные были успешно обновлены')
+        setTimeout(setProfileMessage, 5000, '')
         setApiErrorMessage('')
         setCurrentUser(res.user)
         setEditProfileClicked(false)
@@ -191,7 +205,7 @@ function App(props) {
     } else {
       const savedFilmId = allSavedFilms.find(function (savedFilm) {
         if (savedFilm.movieId === card.id) {
-          let id = savedFilm._id
+          const id = savedFilm._id
           console.log(id)
           return id
         }
@@ -248,8 +262,8 @@ function App(props) {
           <Route path="/signin" >
             <Login onLogin={handleLogin} apiErrorMessage={apiErrorMessage} />
           </Route>
-          <Route path="/movies">
             <ProtectedRoute
+              path="/movies"
               loggedIn={loggedIn}
               component={Movies}
               handleMenuOpenClick={handleMenuOpenClick}
@@ -261,10 +275,8 @@ function App(props) {
               onCardSave={handleCardSave}
               savedFilms={savedFilms}
             />
-
-          </Route>
-          <Route path="/saved-movies">
             <ProtectedRoute
+              path="/saved-movies"
               loggedIn={loggedIn}
               component={SavedMovies}
               handleMenuOpenClick={handleMenuOpenClick}
@@ -273,7 +285,6 @@ function App(props) {
               getMovies={filterSavedFilms}
               handleShortsChange={handleSavedShortsChange}
             />
-          </Route>
           <Route exact path="/">
             <Main handleMenuOpenClick={handleMenuOpenClick} loggedIn={loggedIn} />
           </Route>
@@ -287,6 +298,7 @@ function App(props) {
               setLoggedIn={setLoggedIn}
               handleUpdateUser={handleUpdateUser}
               apiErrorMessage={apiErrorMessage}
+              profileMessage={profileMessage}
             />
           </Route>
           <Route path="*">

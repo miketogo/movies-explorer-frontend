@@ -101,6 +101,7 @@ function Profile(props) {
 
                 </div>
               </form>
+              <p className="profile__good-massage">{props.profileMessage}</p>
               <button className="profile__edit" onClick={handleEditProfileClick}>Редактировать</button>
               <div className="profile__auth-text-container">
                 <p className="profile__exit" to='/signin' onClick={handleExit}>Выйти из аккаунта</p>
@@ -125,7 +126,7 @@ function Profile(props) {
                 <span className="profile__error">{emailValidity.errorMassage}</span>
               </div>
               <span className="profile__api-error">{props.apiErrorMessage}</span>
-              <button type="submit" className={`profile__submit-button ${(emailValidity.validState && nameValidity.validState) ? "profile__submit-button_active" : "profile__submit-button_disabled"}`} disabled={(emailValidity.validState && nameValidity.validState) ?  false :  true}>Сохранить</button>
+              <button type="submit" className={`profile__submit-button ${(emailValidity.validState && nameValidity.validState && (emailValue !== currentUser.email || nameValue !== currentUser.name)) ? "profile__submit-button_active" : "profile__submit-button_disabled"}`} disabled={(emailValidity.validState && nameValidity.validState && (emailValue !== currentUser.email || nameValue !== currentUser.name)) ?  false :  true}>Сохранить</button>
             </form>
           )}
         </>
