@@ -1,7 +1,7 @@
 import '../../index.css';
 import './MenuPopup.css';
 import React from "react";
-import { Link, withRouter, NavLink } from 'react-router-dom';
+import { Link,  NavLink } from 'react-router-dom';
 
 import profileIcon from '../../images/profile-icon.svg'
 

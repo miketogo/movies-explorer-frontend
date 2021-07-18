@@ -96,7 +96,7 @@
 }
 .search-form__visible-checkbox{
   display: inline-block;
-  transform: translateX(8px);
+  transform: translateX(-8px);
   width: 14px;
   height: 14px;
   border-radius: 50%;
@@ -105,7 +105,7 @@
   transition: transform 0.3s ease-in-out;
 }
 .search-form__checkbox:checked + .search-form__visible-checkbox{
-  transform: translateX(-8px);
+  transform: translateX(8px);
 }
 
 .search-form__checkbox:focus + .search-form__visible-checkbox{
@@ -135,6 +135,18 @@
   margin: 0 0 0 14px;
   color: #FFFFFF;
 
+}
+.search-form__error{
+  margin: 10px 0 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 13px;
+  /* identical to box height */
+
+
+
+  color: #FF004C;
 }
 @media (max-width: 1175px){
   .search-form{

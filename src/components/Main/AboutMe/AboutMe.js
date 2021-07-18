@@ -1,7 +1,7 @@
 import '../../../index.css';
 import './AboutMe.css';
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+
 
 import me from '../../../images/me.jpg'
 
