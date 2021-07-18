@@ -1,7 +1,7 @@
 import '../../index.css';
 import './Main.css';
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+
 
 import Header from '../Header/Header';
 import Promo from './Promo/Promo';
@@ -18,7 +18,7 @@ import Footer from '../Footer/Footer';
 function Main(props) {
   return (
     <>
-    <Header handleMenuOpenClick={props.handleMenuOpenClick} isLoggedIn={props.isLoggedIn}/>
+    <Header handleMenuOpenClick={props.handleMenuOpenClick} loggedIn={props.loggedIn}/>
     <div className="main">
       <Promo />
       <NavTab />

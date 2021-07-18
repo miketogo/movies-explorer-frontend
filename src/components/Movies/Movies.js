@@ -1,7 +1,7 @@
 import '../../index.css';
 import './Movies.css';
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
@@ -11,14 +11,15 @@ import MoviesCardList from './MoviesCardList/MoviesCardList';
 
 
 
+
 function Movies(props) {
   return (
     <>
-    <Header handleMenuOpenClick={props.handleMenuOpenClick} isLoggedIn={true}/>
+    <Header handleMenuOpenClick={props.handleMenuOpenClick} loggedIn={props.loggedIn}/>
     {/* <Header handleMenuOpenClick={props.handleMenuOpenClick} isLoggedIn={props.isLoggedIn}/> */}
     <div className="movies">
-      <SearchForm />
-      <MoviesCardList />
+      <SearchForm getMovies={props.getMovies} handleShortsChange={props.handleShortsChange}/>
+      <MoviesCardList films={props.films} isPreloaderVisible={props.isPreloaderVisible} filmsApiErrorMessage={props.filmsApiErrorMessage} onCardSave={props.onCardSave} savedFilms={props.savedFilms}/>
     </div>
     <Footer />
     </>

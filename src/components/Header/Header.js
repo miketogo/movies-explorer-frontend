@@ -1,7 +1,7 @@
 import '../../index.css';
 import './Header.css';
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo.svg'
 import Navigation from '../Navigation/Navigation';
@@ -14,7 +14,7 @@ function Header(props) {
       <Link to="/" className="header__logo">
         <img alt="Логотип" src={logo} />
       </Link>
-      {props.isLoggedIn ? (
+      {props.loggedIn ? (
         <>
           <Navigation />
           <Link to="/profile" className="header__profile-button-container">

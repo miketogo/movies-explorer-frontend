@@ -97,12 +97,13 @@ text-align: center;
 
 /* identical to box height */
 text-decoration: none;
-transition: opacity 0.3s ease-in-out;
+transition: opacity 0.3s ease-in-out, background-color 0.3s ease-in-out;
 color: #FFFFFF;
 cursor: pointer;
 border: none;
 padding: 0;
-margin-top: 221px;
+margin-top: 20px;
+
 }
 .login__submit-button:focus {
 outline: none;
@@ -111,7 +112,37 @@ outline: none;
 opacity: 0.8;
 }
 
+.login__submit-button_active{
 
+}
+.login__submit-button_disabled{
+  background: #F8F8F8;
+  color: #C2C2C2;
+  cursor: not-allowed;
+}
+.login__submit-button_disabled:hover{
+  opacity: 1;
+}
+.login__error{
+  font-style: normal;
+font-weight: normal;
+font-size: 10px;
+line-height: 12px;
+margin: 6px 0 0;
+color: #EE3465;
+}
+.login__api-error{
+  margin-top: 200px;
+  font-style: normal;
+font-weight: normal;
+font-size: 11px;
+line-height: 13px;
+/* identical to box height */
+
+text-align: center;
+
+color: #FF004C;
+}
 .login__auth-text{
 font-style: normal;
 font-weight: normal;

@@ -1,7 +1,7 @@
 import '../../../index.css';
 import './Promo.css';
 import React from "react";
-import { Link, withRouter } from 'react-router-dom';
+
 
 import logo from '../../../images/promo-logo.svg'
 
